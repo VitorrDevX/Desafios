@@ -29,13 +29,3 @@ function funcs.checkToogle()
         end
     end
 end
-
-function funcs.darVida()
-	repeat
-		SetEntityHealth(PlayerPedId(),GetEntityHealth(PlayerPedId())+1)
-		Citizen.Wait(1500)
-	until GetEntityHealth(PlayerPedId()) >= 240 or GetEntityHealth(PlayerPedId()) <= 100
-    EnableAllControlActions(0)
-    ClearPedTasks(ped)
-    TriggerEvent('Notify', 'aviso', "Seu tratamento acabou")
-end
