@@ -33,6 +33,24 @@ function requestAnimDict(dict)
         Wait(0)
     until HasAnimDictLoaded(dict)
 end
+
+function desabilitar()
+    CreateThread(function()
+        while true do
+            Wait(0)
+            DisableAllControlActions(0)
+        end
+    end)
+end
+
+function habilitar()
+    CreateThread(function()
+        while true do
+            Wait(0)
+            EnableAllControlActions(0)
+        end
+    end)
+end
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- CODE
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -49,7 +67,7 @@ CreateThread(function()
                 macaCds = GetEntityCoords(maca) 
                 dist = #(macaCds - pedCoords) 
                 if dist < 3.0 then
-                    drawText3D(macaCds.x, macaCds.y, macaCds.z, "~o~E ~g~Tratamento \n~o~G~g~ Deitar")
+                    drawText3D(macaCds.x, macaCds.y, macaCds.z + 0.9, "~r~[E] ~b~Tratamento \n~r~[G]~b~ Deitar")
                     if IsControlJustPressed(0, 38) then
                         if funcs.checkToogle() == false then
                             if funcs.pagamento() == true then
@@ -59,6 +77,7 @@ CreateThread(function()
                                 SetEntityHeading(ped, 162.7467)
                                 TaskPlayAnim(ped, deitarDict, deitarAnim, 4.0, 4.0, -1, 1, 0.0, true, true, true)
                                 TriggerEvent('Notify', 'sucesso', "Seu tratamento foi iniciado, aguarde a vida ficar cheia")
+                                desabilitar()
                                 darVida()
                             end
                         else
@@ -85,6 +104,7 @@ function darVida()
         SetEntityHealth(PlayerPedId(),GetEntityHealth(PlayerPedId()) + 10)
         Wait(1500)
 	until GetEntityHealth(ped) >= 400
+    habilitar()
     FreezeEntityPosition(ped, false)
     ClearPedTasks(ped)
     TriggerEvent('Notify', 'aviso', "Seu tratamento acabou")
